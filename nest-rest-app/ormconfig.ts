@@ -1,5 +1,5 @@
-import { User } from './src/entities/user.entity';
 import { Post } from './src/entities/post.entity';
+import { User } from './src/entities/user.entity';
 
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
@@ -8,10 +8,10 @@ const config: PostgresConnectionOptions & {
   factories: string[];
 } = {
   type: 'postgres',
-  database: 'testDB',
+  database: 'admin',
   host: 'localhost',
-  username: 'postgres',
-  password: 'postgres',
+  username: 'admin',
+  password: 'admin',
   port: 5432,
   entities: [User, Post],
 
