@@ -5,6 +5,7 @@ import { type ComponentPropsWithoutRef, type FC } from "react";
 const headerLinks = [
   { href: "/", label: "Home" },
   { href: "/admin", label: "Admin" },
+  { href: "/admin/panel", label: "AdminPanel" },
 ];
 
 export interface HeaderProps extends ComponentPropsWithoutRef<"header"> {}
@@ -32,7 +33,7 @@ export const Header: FC<HeaderProps> = (props) => {
           ))}
         </ul>
       </nav>
-      <div className="ml-auto flex gap-2">
+      <div className="ml-auto flex items-center gap-2">
         {!session?.user ? (
           <Link
             href={"/auth"}
@@ -45,13 +46,16 @@ export const Header: FC<HeaderProps> = (props) => {
             Login
           </Link>
         ) : (
-          <button
-            type="button"
-            className="px-4 py-2 border-white border rounded-lg hover:bg-blue-700 hover:text-white transition-colors"
-            onClick={() => signOut()}
-          >
-            Logout
-          </button>
+          <>
+            <p>{session?.user?.name}</p>
+            <button
+              type="button"
+              className="px-4 py-2 border-white border rounded-lg hover:bg-blue-700 hover:text-white transition-colors"
+              onClick={() => signOut()}
+            >
+              Logout
+            </button>
+          </>
         )}
       </div>
     </header>

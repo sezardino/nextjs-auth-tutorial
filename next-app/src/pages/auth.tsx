@@ -1,11 +1,19 @@
+import { signIn } from "next-auth/react";
 import { FormEvent, useState } from "react";
 
 const AuthPage = () => {
-  const [username, setUsername] = useState("");
+  const [email, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const submitHandler = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const submitHandler = async (evt: FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+
+    await signIn("credentials", {
+      email,
+      password,
+      callbackUrl: "/",
+      redirect: true,
+    });
   };
 
   return (
@@ -20,8 +28,8 @@ const AuthPage = () => {
             type="text"
             name="username"
             placeholder="Username"
-            value={username}
-            className="px-4 py-2 border border-gray-300 rounded-lg"
+            value={email}
+            className="px-4 py-2 border border-gray-300 rounded-lg text-black"
             onChange={(evt) => setUsername(evt.currentTarget.value)}
           />
           <input
@@ -29,7 +37,7 @@ const AuthPage = () => {
             name="password"
             placeholder="Password"
             value={password}
-            className="px-4 py-2 border border-gray-300 rounded-lg"
+            className="px-4 py-2 border border-gray-300 rounded-lg text-black"
             onChange={(evt) => setPassword(evt.currentTarget.value)}
           />
           <button className="px-4 py-2 border border-gray-300 rounded-lg">
