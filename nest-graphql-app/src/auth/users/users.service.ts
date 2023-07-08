@@ -4,16 +4,16 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { UsersRepository } from './users.repository';
-import { CreateUserInput } from './dto/create-user.input';
-import { UserDocument } from './models/user.schema';
+import { UserInput } from '../input/user.input';
 import { User } from './models/user.model';
+import { UserDocument } from './models/user.schema';
+import { UsersRepository } from './users.repository';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  async createUser(data: CreateUserInput) {
+  async createUser(data: UserInput) {
     await this.validateCreateUserData(data);
     const userDocument = await this.usersRepository.create({
       ...data,
@@ -22,7 +22,7 @@ export class UsersService {
     return this.getUserFromDocument(userDocument);
   }
 
-  private async validateCreateUserData(data: CreateUserInput) {
+  private async validateCreateUserData(data: UserInput) {
     let userDocument: UserDocument;
     try {
       userDocument = await this.usersRepository.findOne({
@@ -37,10 +37,17 @@ export class UsersService {
 
   async validateUser(email: string, password: string) {
     const user = await this.usersRepository.findOne({ email });
+
+    if (!user) {
+      throw new UnauthorizedException('Credentials are not valid.');
+    }
+
     const passwordIsValid = await bcrypt.compare(password, user.password);
+
     if (!passwordIsValid) {
       throw new UnauthorizedException('Credentials are not valid.');
     }
+
     return user;
   }
 
